@@ -9,36 +9,32 @@ import cv2
 import tensorflow as tf
 from werkzeug.utils import secure_filename
 from sklearn.utils import class_weight
-from weather.weather import get_weather_data  # Assuming you have a function to fetch weather data
+from weather.weather import get_weather_data  
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
-# Setup Flask-Login
+
 login_manager = LoginManager(app)
 login_manager.login_view = "index"
 
-# Image size for soil model
-IMG_SIZE = 150  # Ensure this matches the one used during model training
-
-# Load trained crop prediction model
+IMG_SIZE = 150  
 try:
     crop_model = pickle.load(open("model/model.pkl", "rb"))
-    print("✅ Crop model loaded successfully!")
+    print("Crop model loaded successfully!")
 except Exception as e:
-    print("❌ Error loading crop model:", e)
+    print("Error!", e)
     crop_model = None
 
-# Load trained soil classifier model
 try:
     soil_model = tf.keras.models.load_model("soil_classifier/soil_classifier.h5")
     soil_classes = ["alluvial", "black", "clay", "red"]
 except Exception as e:
-    print("❌ Error loading soil classifier model:", e)
+    print("Error loading soil classifier model:", e)
     soil_model = None
     soil_classes = []
 
-# Recommend crops based on soil type
+
 def recommend_crops(soil_type):
     crops_dict = {
         "alluvial": ["Rice", "Sugarcane", "Wheat"],
@@ -48,7 +44,6 @@ def recommend_crops(soil_type):
     }
     return ", ".join(crops_dict.get(soil_type, []))
 
-# User Authentication
 class User(UserMixin):
     pass
 
@@ -87,7 +82,7 @@ def signup():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    error_message = None  # Initialize error_message variable
+    error_message = None  
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -104,7 +99,7 @@ def login():
             login_user(user)
             return redirect(url_for("home"))
         else:
-            error_message = "Invalid username or password"  # Set error message for invalid credentials
+            error_message = "Invalid username or password"  
 
     return render_template("login.html", error_message=error_message)
 
@@ -134,22 +129,22 @@ def predict():
         print("🔹 Received Input:", data)
 
         if crop_model is None:
-            print("❌ Model not loaded!")
+            print("Model not loaded!")
             return jsonify({"error": "Model not loaded!"})
 
         prediction = crop_model.predict([np.array(data)])[0]
-        print("✅ Prediction Output:", prediction)
+        print("Prediction Output:", prediction)
         
         return jsonify({"prediction": prediction})
     except Exception as e:
-        print("❌ Error:", str(e))
+        print("Error:", str(e))
         return jsonify({"error": str(e)})
 
 @app.route("/soil", methods=["GET", "POST"])
 @login_required
 def soil():
     if request.method == "POST":
-        # Check if the user has uploaded a file
+      
         if 'soilImage' not in request.files:
             return jsonify({"error": "No file part"})
         
@@ -158,42 +153,34 @@ def soil():
         if file.filename == '':
             return jsonify({"error": "No selected file"})
         
-        # Ensure the 'uploads' directory exists before saving the file
         upload_folder = "uploads"
         if not os.path.exists(upload_folder):
             os.makedirs(upload_folder)
         
-        # Save the uploaded file temporarily
         filename = secure_filename(file.filename)
         file_path = os.path.join(upload_folder, filename)
         file.save(file_path)
         
-        # Preprocess the image for classification
         image = cv2.imread(file_path)
-        image = cv2.resize(image, (IMG_SIZE, IMG_SIZE))  # Resize the image to the input size
-        image = np.expand_dims(image, axis=0)  # Add batch dimension
-        image = image / 255.0  # Normalize the image
+        image = cv2.resize(image, (IMG_SIZE, IMG_SIZE))  
+        image = np.expand_dims(image, axis=0)  
+        image = image / 255.0 
 
-        # Predict soil type
         predictions = soil_model.predict(image)
         
-        # Print raw predictions for analysis
         print("🔹 Raw predictions:", predictions)
 
-        # Confidence threshold to decide on uncertain predictions
         confidence_threshold = 0.6
         if max(predictions[0]) < confidence_threshold:
             soil_type = "Uncertain"
         else:
-            predicted_class = np.argmax(predictions, axis=1)[0]  # Get the predicted class index
-            soil_type = soil_classes[predicted_class]  # Get the corresponding soil type
+            predicted_class = np.argmax(predictions, axis=1)[0] 
+            soil_type = soil_classes[predicted_class]  
 
         print("🔹 Predicted class:", predicted_class, "Predicted soil type:", soil_type)
 
-        # Recommend crops based on soil type
-        recommended_crops = recommend_crops(soil_type)  # Using the recommend_crops function
+        recommended_crops = recommend_crops(soil_type)  
 
-        # Return the result as JSON
         return jsonify({
             "soil_type": soil_type,
             "recommended_crops": recommended_crops
@@ -204,7 +191,7 @@ def soil():
 @app.route("/weather", methods=["GET", "POST"])
 @login_required
 def weather():
-    weather_data = None  # Store weather data to pass to the template
+    weather_data = None  
 
     if request.method == "POST":
         try:
@@ -212,14 +199,13 @@ def weather():
             if not city:
                 return render_template("weather.html", error="City name is required")
             
-            # Assuming you have a function to get weather data
             weather_data = get_weather_data(city)
             
             if weather_data.get("error"):
                 return render_template("weather.html", error=weather_data["error"])
             
         except Exception as e:
-            print("❌ Error fetching weather data:", e)
+            print("Error fetching weather data:", e)
             return render_template("weather.html", error="Failed to fetch weather data")
 
     return render_template("weather.html", weather_data=weather_data)
