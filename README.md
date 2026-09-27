@@ -100,8 +100,8 @@ PlantSphere is developed as an academic project demonstrating the integration of
 
 ## Author
 
-**Samia Mahbub**
-Department of Computer Science and Engineering
+**Samia Mahbub**<br>
+Department of Computer Science and Engineering<br>
 University of Chittagong
 
 [GitHub Repository](https://github.com/Samia5038/PlantSphere)
