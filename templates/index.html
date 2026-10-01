@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Grow with better information{% endblock %}
+{% block content %}
+<section class="landing-hero">
+  <div class="landing-copy reveal">
+
+    <p class="eyebrow"><span class="eyebrow-line">
+
+    </span> A practical companion for the field</p>
+
+    <h1>Good decisions<br>start <em>underfoot.</em></h1>
+
+    <p class="landing-description">Make your next growing decision with a clearer picture of your soil, your crop conditions, and the weather ahead.</p>
+    <div class="landing-actions">
+        <a class="button button-dark button-large" href="{{ url_for('signup') }}">Open your field desk <span>↗</span></a>
+        <a class="text-link" href="{{ url_for('login') }}">I already have an account <span>→</span>
+        </a>
+    </div>
+
+
+    <div class="landing-proof"><span class="proof-rule"></span>
+        <span>Crop guidance</span>
+        <span>Soil insights</span>
+        <span>Local weather</span>
+    
+    </div>
+  </div>
+  
+  <div class="landing-visual reveal reveal-later">
+    <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1200&q=85" alt="Young green plants growing in rich soil">
+    <div class="visual-label"><span class="visual-number">01</span><span>GROW WITH<br>THE WHOLE PICTURE</span></div>
+    <div class="visual-stamp"><span>LOCAL</span><span>FIRST</span></div>
+  </div>
+</section>
+<section class="landing-strip"><span>PLANTSPHERE FIELD DESK</span><p>From a soil sample to a season plan, keep useful signals close at hand.</p><a href="{{ url_for('signup') }}">Get started <span>↗</span></a></section>
+{% endblock %}

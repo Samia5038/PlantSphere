@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Weather{% endblock %}
+{% block content %}
+<section class="page-heading reveal"><div><p class="eyebrow"><span class="eyebrow-line"></span> TOOL 03 / WEATHER</p><h1>Keep one eye<br><em>on the sky.</em></h1></div><p class="heading-note">Look up current conditions for a place<br>before making plans in the field.</p></section>
+<section class="weather-layout">
+  <form class="weather-search" method="post" action="{{ url_for('weather') }}"><label for="city">LOCATION</label><div class="weather-search-row"><input id="city" name="city" value="{{ request.form.get('city', '') }}" placeholder="Enter a city or town" required><button class="button button-dark" type="submit">Check weather <span>↗</span></button></div><p>Current conditions from Open-Meteo. An internet connection is needed for a lookup.</p></form>
+  {% if weather_data %}
+  <section class="weather-reading reveal"><div class="weather-place"><span class="result-kicker">CURRENT CONDITIONS</span><h2>{{ weather_data.city }}{% if weather_data.country %}<span>, {{ weather_data.country }}</span>{% endif %}</h2><p>{{ weather_data.condition }} · {{ weather_data.updated_at }}</p></div><div class="temperature-reading"><strong>{{ weather_data.temperature }}°</strong><span>Feels like {{ weather_data.feels_like }}°C</span></div><div class="weather-stats"><div><span>HUMIDITY</span><strong>{{ weather_data.humidity }}<small>%</small></strong></div><div><span>RAINFALL</span><strong>{{ weather_data.precipitation }}<small> mm</small></strong></div><div><span>WIND</span><strong>{{ weather_data.wind_speed }}<small> km/h</small></strong></div></div><p class="weather-note">Conditions can change quickly. Use a local forecast and your own field observations when timing farm work.</p></section>
+  {% else %}
+  <section class="weather-empty"><div class="weather-sky"><span class="weather-sun"></span><span class="weather-cloud"></span><span class="weather-cloud cloud-small"></span></div><div><span class="result-kicker">WEATHER WINDOW</span><h2>Choose a place<br>to look up.</h2><p>Current temperature, humidity, rainfall and wind will appear here.</p></div><span class="weather-empty-code">OPEN-METEO / LIVE LOOKUP</span></section>
+  {% endif %}
+</section>
+{% endblock %}

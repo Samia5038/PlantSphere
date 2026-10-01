@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173c32">
+  <title>{% block title %}PlantSphere{% endblock %} | PlantSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body class="{% if current_user.is_authenticated %}app-body{% else %}public-body{% endif %}">
+  {% if current_user.is_authenticated %}
+  <div class="app-frame">
+    <aside class="sidebar">
+      <a class="brand" href="{{ url_for('home') }}" aria-label="PlantSphere dashboard">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>plant<span class="brand-light">sphere</span></span>
+      </a>
+      <p class="nav-caption">WORKSPACE</p>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}"><span class="nav-index">01</span>Overview</a>
+        <a class="nav-link {% if request.endpoint == 'crop' %}active{% endif %}" href="{{ url_for('crop') }}"><span class="nav-index">02</span>Crop advisor</a>
+        <a class="nav-link {% if request.endpoint == 'soil' %}active{% endif %}" href="{{ url_for('soil') }}"><span class="nav-index">03</span>Soil check</a>
+        <a class="nav-link {% if request.endpoint == 'weather' %}active{% endif %}" href="{{ url_for('weather') }}"><span class="nav-index">04</span>Weather</a>
+      </nav>
+      <div class="sidebar-note">
+        <span class="status-dot"></span>
+        <div><strong>Field tools ready</strong><small>Local workspace</small></div>
+      </div>
+      <div class="profile-row">
+        <span class="avatar">{{ current_user.username[:1]|upper }}</span>
+        <span class="profile-name">{{ current_user.username }}<small>Grower account</small></span>
+        <form action="{{ url_for('logout') }}" method="post"><button class="logout-button" type="submit" aria-label="Sign out" title="Sign out">↗</button></form>
+      </div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar">
+        <span class="topbar-path">PLANTSPHERE <span>/</span> FIELD DESK</span>
+        <span class="today-label"><span class="status-dot"></span> LOCAL SESSION</span>
+      </header>
+      <div class="page-content">
+  {% else %}
+  <header class="public-header">
+    <a class="brand brand-dark" href="{{ url_for('index') }}">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span>plant<span class="brand-light">sphere</span></span>
+    </a>
+    <nav class="public-nav"><a href="{{ url_for('login') }}">Sign in</a><a class="button button-dark" href="{{ url_for('signup') }}">Create account <span>↗</span></a></nav>
+  </header>
+  <main class="public-main">
+  {% endif %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}<div class="flash-stack {% if not current_user.is_authenticated %}public-flashes{% endif %}">{% for category, message in messages %}<div class="flash flash-{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+  {% if current_user.is_authenticated %}
+      </div>
+    </main>
+  </div>
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a class="{% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}"><span>01</span>Home</a>
+    <a class="{% if request.endpoint == 'crop' %}active{% endif %}" href="{{ url_for('crop') }}"><span>02</span>Crop</a>
+    <a class="{% if request.endpoint == 'soil' %}active{% endif %}" href="{{ url_for('soil') }}"><span>03</span>Soil</a>
+    <a class="{% if request.endpoint == 'weather' %}active{% endif %}" href="{{ url_for('weather') }}"><span>04</span>Weather</a>
+  </nav>
+  {% else %}
+  </main>
+  {% endif %}
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>

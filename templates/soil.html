@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Soil check{% endblock %}
+{% block content %}
+<section class="page-heading reveal"><div><p class="eyebrow"><span class="eyebrow-line"></span> TOOL 02 / SOIL CHECK</p><h1>Read the ground<br><em>in a new way.</em></h1></div><p class="heading-note">A photo can offer a first clue.<br>Use it as a starting point, not a lab result.</p></section>
+<section class="work-layout">
+  <form class="work-form" id="soil-form" action="{{ url_for('soil') }}" method="post" enctype="multipart/form-data">
+    <div class="form-intro"><span class="form-step">IMAGE / 01</span><div><h2>Choose a soil photo</h2><p>Use a clear, close-up image in natural light.</p></div></div>
+    <label class="upload-zone" for="soilImage"><span class="upload-icon">+</span><strong id="file-label">Drop an image here or browse</strong><small>PNG, JPG or WEBP · up to 8 MB</small><input type="file" name="soilImage" id="soilImage" accept="image/png,image/jpeg,image/webp" required></label>
+    <button class="button button-dark button-large form-submit" type="submit"><span class="button-label">Classify soil image</span><span>↗</span></button>
+    <p class="fine-print">The first classification trains the model from Dataset/Train and checks it against Dataset/test. Confirm important decisions with a local soil test.</p>
+  </form>
+  <aside class="result-panel soil-result" id="soil-result" aria-live="polite"><span class="result-kicker">TRAINED IMAGE CLASSIFIER</span><div class="soil-profile-art"><span></span><span></span><span></span></div><h2>Every field<br>has its own story.</h2><p>Upload a soil photo to classify it with the model trained on your Dataset folder.</p><span class="result-footnote">DATASET / TRAINED MODEL / HELD-OUT TEST</span></aside>
+</section>
+{% endblock %}

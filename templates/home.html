@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+<section class="page-heading reveal">
+    <div><p class="eyebrow">
+        <span class="eyebrow-line"></span>
+    </p><h1>A better read on<br><em>what comes next.</em></h1>
+</div>
+<p class="heading-note">A few useful signals can make<br>the next growing decision easier.</p>
+</section>
+
+
+
+<section class="overview-banner reveal reveal-later">
+  <div class="banner-copy">
+    <span class="banner-index">FIELD NOTE / 01</span>
+    <h2>Start with what<br>you know.</h2>
+    <p>Enter the conditions you can measure and explore what may grow well in them.</p>
+    
+    <a class="button button-light" href="{{ url_for('crop') }}">Find a crop match <span>→</span></a></div>
+
+
+  <div class="banner-photo" role="img" aria-label="Sunlit green leaves"></div>
+  <div class="banner-side">
+    <span>THIS SPACE IS</span>
+    <strong>YOURS<br>TO GROW</strong>
+    <span class="banner-side-bottom">CROP · SOIL · SKY</span></div>
+</section>
+
+
+<section class="section-heading">
+    <div>
+        
+        <p class="eyebrow"><span class="eyebrow-line"></span> TOOLS FOR YOUR NEXT STEP</p>
+        
+        <h2>Choose a starting point</h2>
+    
+    </div><span class="section-count">03 TOOLS</span></section>
+
+
+<section class="tool-grid">
+  <a class="tool-card crop-card" href="{{ url_for('crop') }}">
+    <span class="tool-topline"><span>01 / CROP ADVISOR</span><span>↗</span></span>
+    
+    <div class="tool-art art-crop"><i></i><i></i><i></i><b></b></div><h3>Match a crop<br>to your conditions.</h3>
+    
+    <p>Use soil nutrients, temperature, humidity and rainfall to find a suitable crop.</p>
+    
+    <span class="tool-cta">Open crop advisor <span>→</span></span>
+</a>
+
+
+  <a class="tool-card soil-card" href="{{ url_for('soil') }}">
+    <span class="tool-topline">
+        <span>02 / SOIL CHECK</span>
+        <span>↗</span></span>
+        <div class="tool-art art-soil"><span class="soil-ring"></span>
+            <span class="soil-core"></span><span class="soil-speck"></span>
+        </div><h3>Look closer<br>at your soil.</h3>
+        <p>Upload a photo for a quick visual estimate and a few crop ideas to explore.</p>
+        <span class="tool-cta">Open soil check <span>→</span></span>
+    </a>
+
+
+  <a class="tool-card weather-card" href="{{ url_for('weather') }}">
+    <span class="tool-topline">
+        <span>03 / WEATHER</span>
+        <span>↗</span></span>
+        <div class="tool-art art-weather"><span class="sun-disc"></span>
+            <span class="cloud-shape"></span>
+            <span class="rain-line"></span></div>
+            <h3>Keep an eye<br>on the sky.</h3>
+            <p>Check current conditions for a town or city before planning field work.</p>
+            <span class="tool-cta">Open weather <span>→</span></span>
+        </a>
+</section>
+
+
+<footer class="page-footer"><span>PLANTSPHERE / FIELD DESK</span><span>GROW WITH THE WHOLE PICTURE</span></footer>
+{% endblock %}

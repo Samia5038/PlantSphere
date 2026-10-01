@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Create account{% endblock %}
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-image"><div><span class="auth-kicker">PLANTSPHERE / FIELD DESK</span><p>Start with the<br>ground. Grow <em>from there.</em></p></div><span class="auth-image-caption">Your next good growing decision starts here.</span></div>
+  <div class="auth-panel"><p class="eyebrow"><span class="eyebrow-line"></span> Make it yours</p><h1>Create account</h1><p class="auth-subtitle">Set up a local field desk in a few seconds.</p>
+    <form class="stack-form" method="post" action="{{ url_for('signup') }}">
+      <label>Username<input name="username" autocomplete="username" required minlength="3" maxlength="30" placeholder="At least 3 characters"></label>
+      <label>Password<input name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters"></label>
+      <button class="button button-dark button-large form-submit" type="submit">Create account <span>↗</span></button>
+    </form>
+    <p class="auth-switch">Already registered? <a href="{{ url_for('login') }}">Sign in</a></p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Crop advisor{% endblock %}
+{% block content %}
+<section class="page-heading reveal"><div><p class="eyebrow"><span class="eyebrow-line"></span> TOOL 01 / CROP ADVISOR</p><h1>Give the field<br><em>a voice.</em></h1></div><p class="heading-note">Add the conditions you have measured.<br>We'll find the closest crop match.</p></section>
+<section class="work-layout">
+  <form class="work-form" id="crop-form" action="{{ url_for('predict') }}" method="post">
+    <div class="form-intro"><span class="form-step">01—07</span><div><h2>Growing conditions</h2><p>All values are required for a useful match.</p></div></div>
+    <div class="field-grid">
+      <label><span>Nitrogen <small>N</small></span><div class="input-wrap"><input type="number" name="Nitrogen" min="0" step="any" value="90" required><i>kg/ha</i></div></label>
+      <label><span>Phosphorus <small>P</small></span><div class="input-wrap"><input type="number" name="Phosphorus" min="0" step="any" value="42" required><i>kg/ha</i></div></label>
+      <label><span>Potassium <small>K</small></span><div class="input-wrap"><input type="number" name="Potassium" min="0" step="any" value="43" required><i>kg/ha</i></div></label>
+      <label><span>Temperature</span><div class="input-wrap"><input type="number" name="Temperature" min="-10" max="60" step="any" value="21" required><i>°C</i></div></label>
+      <label><span>Humidity</span><div class="input-wrap"><input type="number" name="Humidity" min="0" max="100" step="any" value="82" required><i>%</i></div></label>
+      <label><span>Soil pH</span><div class="input-wrap"><input type="number" name="ph" min="0" max="14" step="any" value="6.5" required><i>pH</i></div></label>
+      <label class="field-wide"><span>Rainfall</span><div class="input-wrap"><input type="number" name="Rainfall" min="0" step="any" value="203" required><i>mm</i></div></label>
+    </div>
+    <button class="button button-dark button-large form-submit" type="submit"><span class="button-label">Find a crop match</span><span>↗</span></button>
+  </form>
+  <aside class="result-panel" id="crop-result" aria-live="polite"><span class="result-kicker">YOUR NEXT STEP</span><div class="result-illustration"><span></span><span></span><span></span><i></i></div><h2>A useful match<br>starts with data.</h2><p>Enter your field conditions to see which crop best fits this combination.</p><span class="result-footnote">MODEL / CROP RECOMMENDATION DATASET</span></aside>
+</section>
+{% endblock %}

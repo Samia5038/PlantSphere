@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-image"><div><span class="auth-kicker">PLANTSPHERE / FIELD DESK</span><p>Come back to<br>what you're <em>growing.</em></p></div><span class="auth-image-caption">A little more clarity for every season.</span></div>
+  <div class="auth-panel"><p class="eyebrow"><span class="eyebrow-line"></span> Welcome back</p><h1>Sign in</h1><p class="auth-subtitle">Your field desk is ready when you are.</p>
+    <form class="stack-form" method="post" action="{{ url_for('login') }}">
+      <label>Username<input name="username" autocomplete="username" required minlength="3"></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="button button-dark button-large form-submit" type="submit">Sign in <span>↗</span></button>
+    </form>
+    <p class="auth-switch">New to PlantSphere? <a href="{{ url_for('signup') }}">Create an account</a></p>
+  </div>
+</section>
+{% endblock %}
