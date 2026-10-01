@@ -1,6 +1,7 @@
 # PlantSphere
 
 PlantSphere is a local Flask web application for crop recommendations, soil-image classification, and current weather lookups. It combines agricultural datasets and lightweight machine-learning models with a browser-based field dashboard.
+[Live Link](https://plantsphere.onrender.com/)
 
 ## Functional Requirements
 
