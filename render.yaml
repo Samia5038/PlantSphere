@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: plantsphere
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 180
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: PLANTSPHERE_DATA_DIR
+        value: /var/data
+      - key: PLANTSPHERE_SECRET_KEY
+        generateValue: true
+    disk:
+      name: plantsphere-data
+      mountPath: /var/data
+      sizeGB: 1

@@ -26,7 +26,7 @@ from weather.weather import get_weather_data
 
 
 BASE_DIR = Path(__file__).resolve().parent
-INSTANCE_DIR = BASE_DIR / "instance"
+INSTANCE_DIR = Path(os.environ.get("PLANTSPHERE_DATA_DIR", BASE_DIR / "instance"))
 DATABASE_PATH = INSTANCE_DIR / "users.db"
 MODEL_PATH = INSTANCE_DIR / "crop_model.joblib"
 DATA_PATH = BASE_DIR / "Crop_recommendation.csv"
@@ -37,8 +37,8 @@ FEATURE_COLUMNS = ["N", "P", "K", "temperature", "humidity", "ph", "rainfall"]
 FORM_FIELDS = ["Nitrogen", "Phosphorus", "Potassium", "Temperature", "Humidity", "ph", "Rainfall"]
 soil_model_payload = None
 
-INSTANCE_DIR.mkdir(exist_ok=True)
-UPLOAD_DIR.mkdir(exist_ok=True)
+INSTANCE_DIR.mkdir(parents=True, exist_ok=True)
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("PLANTSPHERE_SECRET_KEY", "local-plantsphere-session-key")
@@ -129,6 +129,11 @@ def index():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     return render_template("index.html")
+
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"})
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -281,7 +286,11 @@ def upload_too_large(_error):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    app.run(
+        debug=os.environ.get("FLASK_DEBUG") == "1",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", "5000")),
+    )
 
 
 

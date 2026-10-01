@@ -35,33 +35,33 @@ PlantSphere is a local Flask web application for crop recommendations, soil-imag
 
 ```mermaid
 flowchart LR
-    Browser[Browser]
-    UI[Flask templates, CSS and JavaScript]
-    App[Flask application and routes]
-    Auth[Flask-Login authentication]
-    DB[(SQLite users database)]
-    CropData[Crop_recommendation.csv]
-    CropModel[Random Forest crop model]
-    TrainData[Dataset/Train class folders]
-    TestData[Dataset/test class folders]
-    SoilModel[Extra Trees soil image model]
-    Weather[Open-Meteo geocoding and forecast APIs]
-    Runtime[(instance/ local models and uploads)]
+       Browser[Browser]
+       UI[Flask templates, CSS and JavaScript]
+       App[Flask application and routes]
+       Auth[Flask-Login authentication]
+       DB[(SQLite users database)]
+       CropData[Crop_recommendation.csv]
+       CropModel[Random Forest crop model]
+       TrainData[Dataset/Train class folders]
+       TestData[Dataset/test class folders]
+       SoilModel[Extra Trees soil image model]
+       Weather[Open-Meteo geocoding and forecast APIs]
+       Runtime[(instance/ local models and uploads)]
 
-    Browser <--> UI
-    UI <--> App
-    App <--> Auth
-    Auth <--> DB
-    App --> CropData
-    CropData --> CropModel
-    App <--> CropModel
-    TrainData --> SoilModel
-    TestData --> SoilModel
-    App <--> SoilModel
-    App <--> Weather
-    CropModel --> Runtime
-    SoilModel --> Runtime
-    App --> Runtime
+       Browser <--> UI
+       UI <--> App
+       App <--> Auth
+       Auth <--> DB
+       App --> CropData
+       CropData --> CropModel
+       App <--> CropModel
+       TrainData --> SoilModel
+       TestData --> SoilModel
+       App <--> SoilModel
+       App <--> Weather
+       CropModel --> Runtime
+       SoilModel --> Runtime
+       App --> Runtime
 ```
 
 ### Component responsibilities
@@ -123,6 +123,20 @@ To train/evaluate the soil model manually before starting the app:
 ```
 
 To stop the local server, press `Ctrl+C` in the terminal running Flask. In VS Code, select `.venv\Scripts\python.exe` as the workspace Python interpreter.
+
+## Deploy Live on Render
+
+The repository includes a Render Blueprint in `render.yaml`. It configures the Python web service, health check, generated Flask secret, and a persistent disk mounted at `/var/data`. A paid Render Starter web service is required because the SQLite accounts and trained models must survive restarts; Render's free web service does not provide a persistent disk.
+
+1. Sign in to [Render](https://render.com/) and connect the GitHub account that can access `Samia5038/PlantSphere`.
+2. In the Render dashboard, select **New +** and then **Blueprint**.
+3. Choose the `Samia5038/PlantSphere` repository and the `main` branch.
+4. Render reads `render.yaml`. Review the `plantsphere` web service and its persistent disk, then select **Apply**. Confirm the paid Starter plan and disk when prompted.
+5. Wait for the first build and deploy to finish. Render installs `requirements.txt`, starts Gunicorn, and checks `/health`.
+6. Open the `onrender.com` URL shown on the service page and create an account in PlantSphere.
+7. Open **Events** and **Logs** if the deploy fails. The first soil classification trains the model and may take longer than later uploads.
+
+The Blueprint generates `PLANTSPHERE_SECRET_KEY` and sets `PLANTSPHERE_DATA_DIR=/var/data`; do not replace these with local paths. Weather lookups need outbound internet access. To deploy a later GitHub change, push it to `main`; Render will rebuild the service automatically.
 
 ## Project Layout
 
